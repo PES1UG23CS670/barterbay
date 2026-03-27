@@ -1,0 +1,10 @@
+com\barterbay\barterbay\controller\UserController.class
+com\barterbay\barterbay\fx\MainFX.class
+com\barterbay\barterbay\model\Database.class
+com\barterbay\barterbay\repository\UserRepository.class
+com\barterbay\barterbay\fx\RegisterPage.class
+com\barterbay\barterbay\model\User.class
+com\barterbay\barterbay\service\UserService.class
+com\barterbay\barterbay\controller\HomeController.class
+com\barterbay\barterbay\fx\LoginController.class
+com\barterbay\barterbay\BarterbayApplication.class
