@@ -1,6 +1,7 @@
 package com.barterbay.frontend;
 
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 
 import javafx.application.Application;
@@ -59,8 +60,8 @@ public class MainApp extends Application {
                     return;
                 }
 
-                URL url = new URL("http://localhost:8080/api/users/signup?username="
-                        + username + "&password=" + password);
+                URL url = URI.create("http://localhost:8080/api/users/signup?username="
+                    + username + "&password=" + password).toURL();
 
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
