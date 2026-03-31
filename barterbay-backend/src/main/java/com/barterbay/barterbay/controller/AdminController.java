@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.barterbay.barterbay.service.UserService;
+import com.barterbay.barterbay.service.AdminService;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -19,10 +19,10 @@ public class AdminController {
     private static final String ADMIN_ROLE = "ADMIN";
     private static final String ACCESS_DENIED = "Access denied";
 
-    private final UserService userService;
+    private final AdminService adminService;
 
-    public AdminController(UserService userService) {
-        this.userService = userService;
+    public AdminController(AdminService adminService) {
+        this.adminService = adminService;
     }
 
     // ✅ GET ALL USERS
@@ -34,7 +34,7 @@ public class AdminController {
             return ResponseEntity.status(403).body(ACCESS_DENIED);
         }
 
-        return ResponseEntity.ok((Object) userService.getAllUsers());
+        return ResponseEntity.ok((Object) adminService.getAllUsers());
     }
 
     @PutMapping("/users/{id}/status")
@@ -46,7 +46,7 @@ public class AdminController {
             return ResponseEntity.status(403).body(ACCESS_DENIED);
         }
 
-        userService.updateUserStatus(id, status);
+        adminService.updateUserStatus(id, status);
 
         return ResponseEntity.ok((Object) "User status updated");
     }
@@ -59,7 +59,7 @@ public class AdminController {
             return ResponseEntity.status(403).body(ACCESS_DENIED);
         }
 
-        return ResponseEntity.ok((Object) userService.getUserById(id));
+        return ResponseEntity.ok((Object) adminService.getUserById(id));
     }
     @GetMapping("/users/{id}/details")
     public ResponseEntity<Object> getUserDetails(@PathVariable String id,
@@ -68,6 +68,15 @@ public class AdminController {
             return ResponseEntity.status(403).body(ACCESS_DENIED);
         }
 
-        return ResponseEntity.ok((Object) userService.getUserDetails(id));
+        return ResponseEntity.ok((Object) adminService.getUserDetails(id));
+    }
+
+    @GetMapping("/exchanges")
+    public ResponseEntity<Object> getAllExchanges(@RequestParam(required = false) String role) {
+        if (!ADMIN_ROLE.equals(role)) {
+            return ResponseEntity.status(403).body(ACCESS_DENIED);
+        }
+
+        return ResponseEntity.ok((Object) adminService.getAllExchanges());
     }
 }
