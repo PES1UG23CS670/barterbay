@@ -1,15 +1,11 @@
 package com.barterbay.barterbay.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.barterbay.barterbay.dto.UserDetailsDTO;
-import com.barterbay.barterbay.model.Report;
 import com.barterbay.barterbay.model.User;
-import com.barterbay.barterbay.repository.ReportRepository;
 import com.barterbay.barterbay.repository.UserRepository;
 
 @Service
@@ -18,11 +14,11 @@ public class UserService {
     private static final String USER_NOT_FOUND = "User not found";
 
     private final UserRepository repository;
-    private final ReportRepository reportRepository;
+    private final AdminService adminService;
 
-    public UserService(UserRepository repository, ReportRepository reportRepository) {
+    public UserService(UserRepository repository, AdminService adminService) {
         this.repository = repository;
-        this.reportRepository = reportRepository;
+        this.adminService = adminService;
     }
 
     public List<User> getAllUsers() {
@@ -38,29 +34,9 @@ public class UserService {
         return maskPassword(user);
     }
 
-        public UserDetailsDTO getUserDetails(String id) {
-        User user = repository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
-
-        List<Report> reports = reportRepository.findByReportedUser(user.getId());
-        int reportsCount = reports.size();
-        int credibility = (user.getTotalTrades() * 2) + ((int) user.getRating() * 2) - (reportsCount * 3);
-        boolean suspicious = credibility < 0 || reportsCount > 3;
-
-            UserDetailsDTO details = new UserDetailsDTO();
-            details.setId(user.getId());
-            details.setUsername(user.getUsername());
-            details.setRole(user.getRole());
-            details.setStatus(user.getStatus());
-            details.setCredibilityScore(credibility);
-            details.setRating(user.getRating());
-            details.setTotalTrades(user.getTotalTrades());
-            details.setReportsCount(reportsCount);
-            details.setSuspicious(suspicious);
-            details.setReports(new ArrayList<>(reports));
-            details.setExchanges(Collections.emptyList());
-            return details;
-        }
+    public UserDetailsDTO getUserDetails(String id) {
+        return adminService.getUserDetails(id);
+    }
 
     public void updateUserStatus(String id, String status) {
         User user = repository.findById(id)
@@ -68,6 +44,18 @@ public class UserService {
 
         user.setStatus(status);
         repository.save(user);
+    }
+
+    public void updateRating(String id, double newRating) {
+        adminService.updateRating(id, newRating);
+    }
+
+    public void incrementTrades(String id) {
+        adminService.incrementTrades(id);
+    }
+
+    public UserDetailsDTO completeTrade(String id, double newRating) {
+        return adminService.completeTrade(id, newRating);
     }
 
     private User maskPassword(User user) {
@@ -121,5 +109,6 @@ public class UserService {
 
     return user;
 }
+
 
 }

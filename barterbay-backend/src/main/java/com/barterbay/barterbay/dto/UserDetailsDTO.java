@@ -16,6 +16,8 @@ public class UserDetailsDTO {
     private int totalTrades;
     private int reportsCount;
     private boolean suspicious;
+    private boolean trusted;
+    private String trustLevel;
     private List<Object> reports;
     private List<Object> exchanges;
 
@@ -93,6 +95,22 @@ public class UserDetailsDTO {
 
     public void setSuspicious(boolean suspicious) {
         this.suspicious = suspicious;
+    }
+
+    public boolean isTrusted() {
+        return trusted;
+    }
+
+    public void setTrusted(boolean trusted) {
+        this.trusted = trusted;
+    }
+
+    public String getTrustLevel() {
+        return trustLevel;
+    }
+
+    public void setTrustLevel(String trustLevel) {
+        this.trustLevel = trustLevel;
     }
 
     public List<Object> getReports() {
