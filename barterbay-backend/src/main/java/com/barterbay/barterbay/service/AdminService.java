@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.barterbay.barterbay.dto.AdminExchangeSummaryDTO;
 import com.barterbay.barterbay.dto.UserDetailsDTO;
+import com.barterbay.barterbay.exception.BadRequestException;
+import com.barterbay.barterbay.exception.NotFoundException;
 import com.barterbay.barterbay.model.ExchangeRequest;
 import com.barterbay.barterbay.model.Report;
 import com.barterbay.barterbay.model.User;
@@ -24,38 +26,41 @@ public class AdminService {
     private final UserRepository userRepository;
     private final ReportRepository reportRepository;
     private final ExchangeRequestRepository exchangeRequestRepository;
+    private final UserSanitizer userSanitizer;
 
     public AdminService(
             UserRepository userRepository,
             ReportRepository reportRepository,
-            ExchangeRequestRepository exchangeRequestRepository) {
+            ExchangeRequestRepository exchangeRequestRepository,
+            UserSanitizer userSanitizer) {
         this.userRepository = userRepository;
         this.reportRepository = reportRepository;
         this.exchangeRequestRepository = exchangeRequestRepository;
+        this.userSanitizer = userSanitizer;
     }
 
     public List<User> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(this::maskPassword)
+                .map(userSanitizer::toSafeUser)
                 .toList();
     }
 
     public void updateUserStatus(String id, String status) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         user.setStatus(status);
         userRepository.save(user);
     }
 
     public User getUserById(String id) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
-        return maskPassword(user);
+            .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        return userSanitizer.toSafeUser(user);
     }
 
     public UserDetailsDTO getUserDetails(String id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
         List<Report> reports = reportRepository.findByReportedUser(id);
         int reportsCount = reports.size();
@@ -87,11 +92,11 @@ public class AdminService {
 
     public void updateRating(String id, double newRating) {
         if (newRating < 0.0 || newRating > 5.0) {
-            throw new IllegalArgumentException("Rating must be between 0 and 5");
+            throw new BadRequestException("Rating must be between 0 and 5");
         }
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
         int completedTrades = user.getTotalTrades();
         double updatedRating;
@@ -111,11 +116,11 @@ public class AdminService {
 
     public UserDetailsDTO completeTrade(String id, double newRating) {
         if (newRating < 0.0 || newRating > 5.0) {
-            throw new IllegalArgumentException("Rating must be between 0 and 5");
+            throw new BadRequestException("Rating must be between 0 and 5");
         }
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
         user.setTotalTrades(user.getTotalTrades() + 1);
 
@@ -134,7 +139,7 @@ public class AdminService {
 
     public void incrementTrades(String userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
         user.setTotalTrades(user.getTotalTrades() + 1);
 
@@ -192,20 +197,6 @@ public class AdminService {
             return "TRUSTED";
         }
         return "NORMAL";
-    }
-
-    private User maskPassword(User user) {
-        User safeUser = new User();
-        safeUser.setId(user.getId());
-        safeUser.setUsername(user.getUsername());
-        safeUser.setPassword(null);
-        safeUser.setCredibilityScore(user.getCredibilityScore());
-        safeUser.setPoints(user.getPoints());
-        safeUser.setRating(user.getRating());
-        safeUser.setRole(user.getRole());
-        safeUser.setStatus(user.getStatus());
-        safeUser.setTotalTrades(user.getTotalTrades());
-        return safeUser;
     }
 
     private AdminExchangeSummaryDTO toExchangeSummary(ExchangeRequest exchangeRequest) {
