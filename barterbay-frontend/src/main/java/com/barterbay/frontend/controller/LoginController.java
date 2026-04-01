@@ -2,19 +2,20 @@ package com.barterbay.frontend.controller;
 
 import java.io.IOException;
 
+import com.barterbay.frontend.model.UserSession;
 import com.barterbay.frontend.service.AuthGateway;
 import com.barterbay.frontend.service.NavigationService;
 import com.barterbay.frontend.service.ServiceRegistry;
+import com.barterbay.frontend.service.SessionManager;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-public class SignupController {
+public class LoginController {
 
     private static final String STATUS_ERROR = "status-error";
-    private static final String STATUS_SUCCESS = "status-success";
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
@@ -22,10 +23,10 @@ public class SignupController {
 
     private final AuthGateway authGateway = ServiceRegistry.authGateway();
     private final NavigationService navigationService = ServiceRegistry.navigationService();
+    private final SessionManager sessionManager = ServiceRegistry.sessionManager();
 
     @FXML
-    public void handleSignup() {
-
+    public void handleLogin() {
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
 
@@ -35,40 +36,34 @@ public class SignupController {
         }
 
         try {
-            boolean success = authGateway.signup(username, password);
+            UserSession session = authGateway.login(username, password);
+            sessionManager.setCurrentUser(session);
 
-            if (success) {
-                statusLabel.setText("Signup successful! You can login now.");
-                statusLabel.getStyleClass().removeAll(STATUS_ERROR);
-                if (!statusLabel.getStyleClass().contains(STATUS_SUCCESS)) {
-                    statusLabel.getStyleClass().add(STATUS_SUCCESS);
-                }
-                usernameField.clear();
-                passwordField.clear();
-            } else {
-                setError("Signup failed.");
+            if (sessionManager.isAdmin()) {
+                navigationService.openAdminDashboard();
+                return;
             }
 
+            navigationService.openUserDashboard();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            setError("Signup interrupted.");
-        } catch (IOException | RuntimeException e) {
-            setError("Error: " + e.getMessage().replace('"', ' '));
+        } catch (IOException e) {
+            setError("Login failed: " + e.getMessage().replace('"', ' '));
         }
     }
 
     @FXML
-    public void goToLogin() {
+    public void goToSignup() {
         try {
-            navigationService.openLogin();
+            navigationService.openSignup();
         } catch (IOException e) {
-            setError("Unable to open login page.");
+            setError("Unable to open signup page.");
         }
     }
 
     private void setError(String message) {
         statusLabel.setText(message);
-        statusLabel.getStyleClass().removeAll(STATUS_SUCCESS);
+        statusLabel.getStyleClass().removeAll("status-success");
         if (!statusLabel.getStyleClass().contains(STATUS_ERROR)) {
             statusLabel.getStyleClass().add(STATUS_ERROR);
         }
