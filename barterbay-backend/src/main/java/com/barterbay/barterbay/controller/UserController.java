@@ -6,10 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.barterbay.barterbay.exception.BadRequestException;
 import com.barterbay.barterbay.model.User;
 import com.barterbay.barterbay.service.UserService;
 
@@ -32,35 +34,72 @@ public class UserController {
 
     // ✅ SIGNUP WITH ERROR HANDLING
     @PostMapping("/signup")
-    public ResponseEntity<Object> signup(@RequestParam String username,
-                                   @RequestParam String password) {
+    public ResponseEntity<Object> signup(@RequestBody(required = false) AuthPayload payload,
+                                         @RequestParam(required = false) String username,
+                                         @RequestParam(required = false) String password) {
 
-        try {
-            User user = service.register(username, password);
-            return ResponseEntity.status(201).body(user);
+        String resolvedUsername = firstNonBlank(payload != null ? payload.getUsername() : null, username);
+        String resolvedPassword = firstNonBlank(payload != null ? payload.getPassword() : null, password);
 
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+        if (resolvedUsername == null || resolvedPassword == null) {
+            throw new BadRequestException("username and password are required");
         }
+
+        User user = service.register(resolvedUsername, resolvedPassword);
+        return ResponseEntity.status(201).body(user);
     }
     // ✅ LOGIN API
 @PostMapping("/login")
-public ResponseEntity<Object> login(@RequestParam String username,
-                               @RequestParam String password) {
+public ResponseEntity<Object> login(@RequestBody(required = false) AuthPayload payload,
+                               @RequestParam(required = false) String username,
+                               @RequestParam(required = false) String password) {
 
-    try {
-        User user = service.login(username, password);
+    String resolvedUsername = firstNonBlank(payload != null ? payload.getUsername() : null, username);
+    String resolvedPassword = firstNonBlank(payload != null ? payload.getPassword() : null, password);
 
-        return ResponseEntity.ok(user);
-
-    } catch (RuntimeException e) {
-        return ResponseEntity.status(401).body(e.getMessage());
+    if (resolvedUsername == null || resolvedPassword == null) {
+        throw new BadRequestException("username and password are required");
     }
+
+    User user = service.login(resolvedUsername, resolvedPassword);
+
+    return ResponseEntity.ok(user);
 }
 @PutMapping("/rate/{id}")
 public ResponseEntity<Object> rateUser(@PathVariable String id,
                                   @RequestParam double rating) {
     service.updateRating(id, rating);
     return ResponseEntity.ok((Object) "Rating updated");
+}
+
+private String firstNonBlank(String primary, String fallback) {
+    if (primary != null && !primary.isBlank()) {
+        return primary;
+    }
+    if (fallback != null && !fallback.isBlank()) {
+        return fallback;
+    }
+    return null;
+}
+
+public static class AuthPayload {
+    private String username;
+    private String password;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
 }

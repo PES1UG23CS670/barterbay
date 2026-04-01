@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.barterbay.frontend.controller.AdminDashboardController"
+            prefWidth="1260" prefHeight="760" styleClass="dashboard-root">
+
+    <top>
+        <HBox spacing="12" alignment="CENTER_LEFT" styleClass="dashboard-header">
+            <Label fx:id="headerLabel" text="Welcome, Admin" styleClass="dashboard-title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="Refresh" onAction="#refreshAll" styleClass="ghost-button"/>
+            <Button text="Logout" onAction="#logout" styleClass="danger-button"/>
+        </HBox>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.58" styleClass="dashboard-split">
+            <VBox spacing="10" styleClass="card-panel">
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Users" styleClass="section-title"/>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <Button text="Set ACTIVE" onAction="#activateSelectedUser" styleClass="ghost-button"/>
+                    <Button text="Set BLOCKED" onAction="#blockSelectedUser" styleClass="danger-button"/>
+                </HBox>
+                <TableView fx:id="usersTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="userIdCol" text="ID" prefWidth="180"/>
+                        <TableColumn fx:id="usernameCol" text="Username" prefWidth="170"/>
+                        <TableColumn fx:id="userRoleCol" text="Role" prefWidth="110"/>
+                        <TableColumn fx:id="userStatusCol" text="Status" prefWidth="140"/>
+                    </columns>
+                </TableView>
+                <TextArea fx:id="selectedUserDetailsArea" prefRowCount="7" wrapText="true" editable="false" styleClass="details-area"/>
+            </VBox>
+
+            <VBox spacing="10" styleClass="card-panel">
+                <Label text="Exchange Monitoring" styleClass="section-title"/>
+                <TableView fx:id="exchangesTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="requesterCol" text="Requester" prefWidth="170"/>
+                        <TableColumn fx:id="receiverCol" text="Receiver" prefWidth="170"/>
+                        <TableColumn fx:id="exchangeStatusCol" text="Status" prefWidth="140"/>
+                    </columns>
+                </TableView>
+                <Label text="Shows requester, receiver, and status for all exchanges." styleClass="muted-label"/>
+            </VBox>
+        </SplitPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_LEFT" styleClass="status-bar">
+            <Label fx:id="statusLabel" text="Ready" styleClass="status-label"/>
+        </HBox>
+    </bottom>
+</BorderPane>
