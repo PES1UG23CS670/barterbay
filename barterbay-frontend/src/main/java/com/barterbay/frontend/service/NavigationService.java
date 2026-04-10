@@ -4,6 +4,11 @@ import java.io.IOException;
 
 import com.barterbay.frontend.MainApp;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 public class NavigationService {
 
     public void openLogin() throws IOException {
@@ -21,4 +26,12 @@ public class NavigationService {
     public void openUserDashboard() throws IOException {
         MainApp.switchScene("/view/user-dashboard.fxml", "BarterBay Dashboard");
     }
-}
+
+    public void openBrowseProducts() throws IOException {
+        MainApp.switchScene("/view/post-login.fxml", "BarterBay Browse Products");
+    }
+
+    public void openMyListings() throws IOException {
+        MainApp.switchScene("/view/my-listings.fxml", "My Listings");
+    }
+} 
