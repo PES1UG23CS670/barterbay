@@ -10,10 +10,18 @@ import com.barterbay.frontend.service.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.layout.StackPane;
+
+
 public class UserDashboardController {
 
     @FXML private Label welcomeLabel;
     @FXML private Label statusLabel;
+
+    @FXML
+    private StackPane contentArea;
 
     private final SessionManager sessionManager = ServiceRegistry.sessionManager();
     private final NavigationService navigationService = ServiceRegistry.navigationService();
@@ -27,6 +35,8 @@ public class UserDashboardController {
         if (currentUser != null) {
             statusLabel.setText("Role: " + currentUser.role() + " | Status: " + currentUser.status());
         }
+
+        showBrowse();
     }
 
     @FXML
@@ -38,4 +48,29 @@ public class UserDashboardController {
             statusLabel.setText("Unable to return to login page.");
         }
     }
+
+    @FXML
+    private void showBrowse() {
+        loadPage("/view/browse.fxml");
+    }
+
+    @FXML
+    private void showListings() {
+        loadPage("/view/listings.fxml");
+    }
+
+    @FXML
+    private void showExchanges() {
+        loadPage("/view/exchanges.fxml");
+    }
+
+    private void loadPage(String path) {
+        try {
+            Parent page = FXMLLoader.load(getClass().getResource(path));
+            contentArea.getChildren().setAll(page);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -1,0 +1,57 @@
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.barterbay.frontend.controller.BrowseProductsController"
+            stylesheets="@post-login.css">
+
+    <!-- SIDEBAR -->
+    <left>
+        <VBox spacing="15"
+            prefWidth="220"
+            minWidth="220"
+            maxWidth="220"
+            styleClass="sidebar">
+
+            <Label text="BarterBay" styleClass="sidebar-title"/>
+
+            <!-- NAVIGATION TABS -->
+            <VBox spacing="8" fillWidth="true">
+
+                <Label text="Browse Products"
+                       fx:id="browseTab"
+                       onMouseClicked="#goToBrowse"
+                       maxWidth="Infinity"
+                       styleClass="sidebar-tab active-tab"/>
+
+                <Label text="My Listings"
+                       fx:id="listingsTab"
+                       onMouseClicked="#goToListings"
+                       maxWidth="Infinity"
+                       styleClass="sidebar-tab"/>
+
+                <Label text="Exchanges"
+                       fx:id="exchangesTab"
+                       onMouseClicked="#goToExchanges"
+                       maxWidth="Infinity"
+                       styleClass="sidebar-tab"/>
+
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+        </VBox>
+    </left>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: #f9fafb;">
+            <FlowPane fx:id="productContainer"
+                      hgap="20"
+                      vgap="20"
+                      prefWrapLength="900"
+                      style="-fx-padding: 20;" />
+        </ScrollPane>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,96 @@
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+         fx:controller="com.barterbay.frontend.controller.MyListingsController"
+         stylesheets="@post-login.css">
+
+
+<!-- SIDEBAR -->
+<left>
+    <VBox spacing="15"
+          prefWidth="220"
+          minWidth="220"
+          maxWidth="220"
+          styleClass="sidebar">
+
+        <!-- APP TITLE -->
+        <Label text="BarterBay" styleClass="sidebar-title"/>
+
+        <!-- NAVIGATION TABS -->
+        <VBox spacing="8" fillWidth="true">
+
+            <Label text="Browse Products"
+                   onMouseClicked="#goToBrowse"
+                   maxWidth="Infinity"
+                   styleClass="sidebar-tab"/>
+
+            <Label text="My Listings"
+                   maxWidth="Infinity"
+                   styleClass="sidebar-tab active-tab"/>
+
+            <Label text="Exchanges"
+                   onMouseClicked="#goToExchanges"
+                   maxWidth="Infinity"
+                   styleClass="sidebar-tab"/>
+
+        </VBox>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+    </VBox>
+</left>
+
+<!-- MAIN CONTENT -->
+<center>
+    <HBox spacing="20" style="-fx-padding: 20;">
+
+        <!-- LEFT: ADD PRODUCT -->
+        <VBox spacing="12"
+              prefWidth="280"
+              maxWidth="280"
+              alignment="TOP_LEFT"
+              styleClass="card">
+
+            <Label text="Add Product" styleClass="title"/>
+
+            <TextField fx:id="titleField"
+                       promptText="Item Name"
+                       styleClass="input-field"/>
+
+            <TextField fx:id="descField"
+                       promptText="Description"
+                       styleClass="input-field"/>
+
+            <TextField fx:id="categoryField"
+                       promptText="Category"
+                       styleClass="input-field"/>
+
+            <TextField fx:id="priceField"
+                       promptText="Price"
+                       styleClass="input-field"/>
+
+            <Button text="Add Product"
+                    onAction="#handleAddProduct"
+                    styleClass="primary-button"/>
+
+        </VBox>
+
+        <!-- RIGHT: PRODUCT GRID -->
+        <ScrollPane fitToWidth="true"
+                    HBox.hgrow="ALWAYS"
+                    styleClass="content-bg">
+
+            <FlowPane fx:id="productContainer"
+                      hgap="20"
+                      vgap="20"
+                      prefWrapLength="800"
+                      style="-fx-padding: 10;" />
+
+        </ScrollPane>
+
+    </HBox>
+</center>
+
+</BorderPane>

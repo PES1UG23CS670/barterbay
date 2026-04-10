@@ -5,6 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.barterbay.barterbay.repository.ExchangeRequestRepository;
+import com.barterbay.barterbay.repository.ProductRepository;
 import com.barterbay.barterbay.repository.ReportRepository;
 import com.barterbay.barterbay.repository.UserRepository;
 
@@ -23,6 +24,9 @@ class BarterbayApplicationTests {
 
 	@MockBean
 	private ExchangeRequestRepository exchangeRequestRepository;
+
+	@MockBean
+	private ProductRepository productRepository;
 
 	@Test
 	void contextLoads() {

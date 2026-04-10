@@ -44,11 +44,17 @@ public class LoginController {
                 return;
             }
 
-            navigationService.openUserDashboard();
+            // navigationService.openUserDashboard();
+            navigationService.openBrowseProducts();
+
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (IOException e) {
             setError("Login failed: " + e.getMessage().replace('"', ' '));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            setError("Unexpected error occored");
         }
     }
 
