@@ -8,10 +8,11 @@ import com.barterbay.frontend.service.ServiceRegistry;
 import com.barterbay.frontend.service.SessionManager;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
 
 public class MyListingsController {
 
@@ -21,6 +22,7 @@ public class MyListingsController {
     @FXML private TextField priceField;
 
     @FXML private FlowPane productContainer;
+    @FXML private Button logoutBtn;
 
     private final ProductService productService = ServiceRegistry.productService();
     private final SessionManager sessionManager = ServiceRegistry.sessionManager();
@@ -98,6 +100,16 @@ public class MyListingsController {
     @FXML
     public void goToExchanges() {
         System.out.println("Exchanges clicked");
+    }
+
+    @FXML
+    public void logout() {
+        sessionManager.clear();
+        try {
+            ServiceRegistry.navigationService().openLogin();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     
