@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.barterbay.frontend.controller.ExchangeController"
+            stylesheets="@post-login.css"
+            prefWidth="1100" prefHeight="700">
+
+    <!-- TOP HEADER -->
+    <top>
+        <VBox spacing="6" styleClass="dashboard-header" BorderPane.alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="14" right="16" bottom="14" left="16" />
+            </padding>
+            <Label text="Exchange Request" styleClass="dashboard-title" />
+            <Label text="Select one of your products to exchange" styleClass="muted-label" />
+        </VBox>
+    </top>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: #f9fafb;">
+            <VBox spacing="20" style="-fx-padding: 20;">
+
+                <!-- REQUESTED PRODUCT SECTION -->
+                <VBox spacing="10" styleClass="card-panel" style="-fx-padding: 16;">
+                    <Label fx:id="requestedProductLabel" text="Product You Want:" styleClass="section-title" />
+                    <Label fx:id="requestedProductDetails" text="Loading..." 
+                           style="-fx-padding: 12; -fx-border-color: #ddd; -fx-border-width: 1;" wrapText="true" />
+                </VBox>
+
+                <!-- YOUR PRODUCTS SECTION -->
+                <VBox spacing="10" styleClass="card-panel" style="-fx-padding: 16;">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label fx:id="yourProductsLabel" text="Select Your Product to Exchange:" styleClass="section-title" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="addNewProductBtn" text="+ Add New Product" onAction="#handleAddNewProduct" 
+                                styleClass="primary-button" />
+                    </HBox>
+
+                    <ScrollPane fitToWidth="true">
+                        <FlowPane fx:id="yourProductsContainer"
+                                  hgap="15"
+                                  vgap="15"
+                                  prefWrapLength="1000"
+                                  style="-fx-padding: 10;" />
+                    </ScrollPane>
+                </VBox>
+
+                <!-- ACTION BUTTONS -->
+                <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 16;">
+                    <Button fx:id="backBtn" text="Back" onAction="#handleBack" 
+                            styleClass="ghost-button" />
+                    <Button fx:id="acceptBtn" text="Accept Exchange" onAction="#handleAccept" 
+                            styleClass="primary-button" style="-fx-padding: 10 30;" />
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

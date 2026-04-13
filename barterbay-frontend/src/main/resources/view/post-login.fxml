@@ -5,6 +5,16 @@
             fx:controller="com.barterbay.frontend.controller.BrowseProductsController"
             stylesheets="@post-login.css">
 
+    <!-- TOP BAR WITH LOGOUT -->
+    <top>
+        <HBox alignment="CENTER_RIGHT" style="-fx-padding: 15; -fx-background-color: white; -fx-border-color: #e5e7eb; -fx-border-width: 0 0 1 0;">
+            <Button fx:id="logoutBtn" 
+                    text="Logout"
+                    onAction="#logout"
+                    style="-fx-padding: 8 20; -fx-font-size: 12; -fx-cursor: hand;"/>
+        </HBox>
+    </top>
+
     <!-- SIDEBAR -->
     <left>
         <VBox spacing="15"

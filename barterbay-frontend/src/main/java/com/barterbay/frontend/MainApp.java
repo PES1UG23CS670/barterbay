@@ -11,6 +11,19 @@ import javafx.stage.Stage;
 public class MainApp extends Application {
 
     private static Stage primaryStage;
+    private static com.barterbay.frontend.model.Product selectedProductForExchange;
+
+    public static void setSelectedProductForExchange(com.barterbay.frontend.model.Product product) {
+        selectedProductForExchange = product;
+    }
+
+    public static com.barterbay.frontend.model.Product getSelectedProductForExchange() {
+        return selectedProductForExchange;
+    }
+
+    public static void clearSelectedProductForExchange() {
+        selectedProductForExchange = null;
+    }
 
     @Override
     public void start(Stage stage) throws IOException {

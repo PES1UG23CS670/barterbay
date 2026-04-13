@@ -1,28 +1,31 @@
 package com.barterbay.barterbay.model;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Document(collection = "exchange_requests")
 public class ExchangeRequest {
 
     @Id
-    @JsonProperty("_id")
     private String id;
 
-    @Field("requesterId")
     private String requesterId;
 
-    @Field("receiverId")
     private String receiverId;
+
+    private String requestedProductId;
+
+    private List<String> offeredProductIds;
 
     private String status;
 
+    private int negotiationCount;
+
     public ExchangeRequest() {
         // Default constructor for Spring Data mapping.
+        this.negotiationCount = 0;
     }
 
     public String getId() {
@@ -49,11 +52,35 @@ public class ExchangeRequest {
         this.receiverId = receiverId;
     }
 
+    public String getRequestedProductId() {
+        return requestedProductId;
+    }
+
+    public void setRequestedProductId(String requestedProductId) {
+        this.requestedProductId = requestedProductId;
+    }
+
+    public List<String> getOfferedProductIds() {
+        return offeredProductIds;
+    }
+
+    public void setOfferedProductIds(List<String> offeredProductIds) {
+        this.offeredProductIds = offeredProductIds;
+    }
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getNegotiationCount() {
+        return negotiationCount;
+    }
+
+    public void setNegotiationCount(int negotiationCount) {
+        this.negotiationCount = negotiationCount;
     }
 }

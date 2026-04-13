@@ -33,7 +33,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleUnexpected(Exception exception, ServletWebRequest request) {
-        return buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected server error", request);
+        System.out.println("DEBUG - Unexpected exception in controller:");
+        System.out.println("  Exception type: " + exception.getClass().getName());
+        System.out.println("  Message: " + exception.getMessage());
+        exception.printStackTrace();
+        
+        String errorMsg = "Unexpected server error: " + exception.getClass().getSimpleName() + " - " + exception.getMessage();
+        return buildError(HttpStatus.INTERNAL_SERVER_ERROR, errorMsg, request);
     }
 
     private ResponseEntity<ApiError> buildError(HttpStatus status, String message, ServletWebRequest request) {
