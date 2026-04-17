@@ -1,31 +1,49 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 
+<!--
+  ─────────────────────────────────────────────────────────────────────────────
+  CHANGE vs original post-login.fxml:
+    Center content: FlowPane (flat product list)
+                 → ScrollPane > VBox (fx:id="productContainer")
+
+  Why: BrowseProductsController now builds one VBox section per category
+  and appends them to productContainer.  A VBox stacks sections vertically;
+  the inner FlowPanes (built in Java) wrap cards horizontally as before.
+
+  Everything else (sidebar tabs, logout button, styleClass names, fx:id values,
+  onMouseClicked/onAction handlers) is UNCHANGED so existing controller
+  bindings keep working.
+
+  WHERE THIS FILE GOES:
+    barterbay-frontend/src/main/resources/view/post-login.fxml
+    (replaces the existing file)
+  ─────────────────────────────────────────────────────────────────────────────
+-->
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.barterbay.frontend.controller.BrowseProductsController"
             stylesheets="@post-login.css">
 
-    <!-- TOP BAR WITH LOGOUT -->
+    <!-- TOP BAR WITH LOGOUT (unchanged) -->
     <top>
-        <HBox alignment="CENTER_RIGHT" style="-fx-padding: 15; -fx-background-color: white; -fx-border-color: #e5e7eb; -fx-border-width: 0 0 1 0;">
-            <Button fx:id="logoutBtn" 
+        <HBox alignment="CENTER_RIGHT"
+              style="-fx-padding: 15; -fx-background-color: white;
+                     -fx-border-color: #e5e7eb; -fx-border-width: 0 0 1 0;">
+            <Button fx:id="logoutBtn"
                     text="Logout"
                     onAction="#logout"
                     style="-fx-padding: 8 20; -fx-font-size: 12; -fx-cursor: hand;"/>
         </HBox>
     </top>
 
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR (unchanged) -->
     <left>
         <VBox spacing="15"
-            prefWidth="220"
-            minWidth="220"
-            maxWidth="220"
-            styleClass="sidebar">
+              prefWidth="220" minWidth="220" maxWidth="220"
+              styleClass="sidebar">
 
             <Label text="BarterBay" styleClass="sidebar-title"/>
 
-            <!-- NAVIGATION TABS -->
             <VBox spacing="8" fillWidth="true">
 
                 <Label text="Browse Products"
@@ -53,14 +71,15 @@
         </VBox>
     </left>
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN CONTENT
+         CHANGED: FlowPane → ScrollPane > VBox
+         BrowseProductsController appends one category VBox section at a time.
+    -->
     <center>
         <ScrollPane fitToWidth="true" style="-fx-background-color: #f9fafb;">
-            <FlowPane fx:id="productContainer"
-                      hgap="20"
-                      vgap="20"
-                      prefWrapLength="900"
-                      style="-fx-padding: 20;" />
+            <VBox fx:id="productContainer"
+                  spacing="20"
+                  style="-fx-padding: 10;" />
         </ScrollPane>
     </center>
 
