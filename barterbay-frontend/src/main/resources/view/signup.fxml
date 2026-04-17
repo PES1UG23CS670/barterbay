@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.barterbay.frontend.controller.SignupController"
+      prefWidth="1120" prefHeight="720" styleClass="app-root">
+  <left>
+    <StackPane prefWidth="450" styleClass="brand-panel">
+      <VBox alignment="CENTER" spacing="14">
+        <Label text="BarterBay" styleClass="brand-title"/>
+        <Label text="Trade Smart. Exchange Anything." styleClass="brand-subtitle"/>
+      </VBox>
+    </StackPane>
+  </left>
+
+  <center>
+    <StackPane styleClass="content-panel">
+      <VBox spacing="14" maxWidth="420" alignment="CENTER_LEFT">
+        <Label text="Create Account" styleClass="form-title"/>
+        <TextField fx:id="usernameField" promptText="Username" styleClass="input-field"/>
+        <PasswordField fx:id="passwordField" promptText="Password" styleClass="input-field"/>
+        <Button text="Sign Up" onAction="#handleSignup" styleClass="primary-button" maxWidth="Infinity"/>
+        <Hyperlink text="Back to login" onAction="#goToLogin" styleClass="secondary-link"/>
+        <Label fx:id="statusLabel" wrapText="true" styleClass="status-label"/>
+      </VBox>
+    </StackPane>
+  </center>
+</BorderPane>

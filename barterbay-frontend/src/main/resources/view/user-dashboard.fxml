@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.barterbay.frontend.controller.UserDashboardController"
+            prefWidth="1100" prefHeight="700" styleClass="dashboard-root">
+
+    <top>
+        <VBox spacing="6" styleClass="dashboard-header" BorderPane.alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="14" right="16" bottom="14" left="16" />
+            </padding>
+            <Label fx:id="welcomeLabel" text="Welcome" styleClass="dashboard-title" />
+            <Label fx:id="statusLabel" text="Role: USER" styleClass="muted-label" />
+        </VBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="16" styleClass="card-panel" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="28" right="28" bottom="28" left="28" />
+            </padding>
+            <Label text="You are logged in as a normal user." styleClass="section-title" />
+            <Label text="Admin tools are restricted to ADMIN role only." styleClass="muted-label" />
+            <Button text="Logout" onAction="#logout" styleClass="ghost-button" />
+        </VBox>
+    </center>
+</BorderPane>
