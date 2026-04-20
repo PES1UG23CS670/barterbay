@@ -1,0 +1,23 @@
+.env
+.vscode
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Java build
+target/
+build/
+*.class
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python (since you added it)
+__pycache__/

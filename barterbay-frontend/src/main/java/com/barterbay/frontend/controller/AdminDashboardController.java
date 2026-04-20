@@ -1,7 +1,9 @@
 package com.barterbay.frontend.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
 
 import com.barterbay.frontend.model.ExchangeRow;
 import com.barterbay.frontend.model.UserRow;
@@ -13,14 +15,18 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Button;
 
 public class AdminDashboardController {
 
     private static final String ADMIN_ROLE = "ADMIN";
+    private static final String STATUS_SUCCESS = "status-success";
+    private static final String STATUS_ERROR = "status-error";
 
     @FXML private Label headerLabel;
     @FXML private Label statusLabel;
@@ -68,11 +74,11 @@ public class AdminDashboardController {
     @FXML
     public void refreshAll() {
         try {
-            List<UserRow> users = adminGateway.getAllUsers(ADMIN_ROLE);
-            usersTable.setItems(FXCollections.observableArrayList(users));
+            List<UserRow> allUsers = adminGateway.getAllUsers(ADMIN_ROLE);
+            usersTable.setItems(FXCollections.observableArrayList(allUsers));
 
-            List<ExchangeRow> exchanges = adminGateway.getExchanges(ADMIN_ROLE);
-            exchangesTable.setItems(FXCollections.observableArrayList(exchanges));
+            List<ExchangeRow> allExchanges = adminGateway.getExchanges(ADMIN_ROLE);
+            exchangesTable.setItems(FXCollections.observableArrayList(allExchanges));
 
             setSuccess("Admin data loaded.");
         } catch (Exception e) {
@@ -145,17 +151,17 @@ public class AdminDashboardController {
 
     private void setError(String message) {
         statusLabel.setText(message);
-        statusLabel.getStyleClass().removeAll("status-success");
-        if (!statusLabel.getStyleClass().contains("status-error")) {
-            statusLabel.getStyleClass().add("status-error");
+        statusLabel.getStyleClass().removeAll(STATUS_SUCCESS);
+        if (!statusLabel.getStyleClass().contains(STATUS_ERROR)) {
+            statusLabel.getStyleClass().add(STATUS_ERROR);
         }
     }
 
     private void setSuccess(String message) {
         statusLabel.setText(message);
-        statusLabel.getStyleClass().removeAll("status-error");
-        if (!statusLabel.getStyleClass().contains("status-success")) {
-            statusLabel.getStyleClass().add("status-success");
+        statusLabel.getStyleClass().removeAll(STATUS_ERROR);
+        if (!statusLabel.getStyleClass().contains(STATUS_SUCCESS)) {
+            statusLabel.getStyleClass().add(STATUS_SUCCESS);
         }
     }
 }
